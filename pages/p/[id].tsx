@@ -26,7 +26,6 @@ const Post: React.FC<{post: PostProps}> = (props) => {
   if (!props?.post?.published) {
     title = `${title} (Draft)`
   }
-  
 
   return (
     <Layout>

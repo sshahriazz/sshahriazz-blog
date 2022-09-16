@@ -28,7 +28,6 @@ type Props = {
 
 const Home: NextPage<Props> = (props) => {
 const {status, data: session} = useSession()
-console.log(props);
 
   return  <Layout>
   <div className="page">
