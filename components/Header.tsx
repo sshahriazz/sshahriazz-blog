@@ -1,7 +1,29 @@
-import React from 'react';
+import React, { FC } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { signOut, useSession } from 'next-auth/react';
+import { Button, Card, Navbar, Radio, Text, VariantProps } from '@nextui-org/react';
+import { VariantsSelectorWrapper } from '../primitive/VariantsSelectorWrapper';
+import { NavbarVariantsProps } from '@nextui-org/react/types/navbar/navbar.styles';
+import ToggleDarkMode from './ToggleDarkMode';
+
+
+export const AcmeLogo: FC = () => 
+  <svg
+    fill="none"
+    height="36"
+    viewBox="0 0 32 32"
+    width="36"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <rect fill="var(--secondary)" height="100%" rx="16" width="100%" />
+    <path
+      clipRule="evenodd"
+      d="M17.6482 10.1305L15.8785 7.02583L7.02979 22.5499H10.5278L17.6482 10.1305ZM19.8798 14.0457L18.11 17.1983L19.394 19.4511H16.8453L15.1056 22.5499H24.7272L19.8798 14.0457Z"
+      fill="currentColor"
+      fillRule="evenodd"
+    />
+  </svg>
 
 const Header: React.FC = () => {
   const router = useRouter();
@@ -9,202 +31,60 @@ const Header: React.FC = () => {
     router.pathname === pathname;
 
   const { data: session, status } = useSession();
+  type NavVariant = "static" | "sticky" | "floating" | undefined
 
-  let left = (
-    <div className="left">
-      <Link href="/">
-        <a className="bold" data-active={isActive('/')}>
-          Feed
-        </a>
-      </Link>
-      <style jsx>{`
-        .bold {
-          font-weight: bold;
-        }
+  const [variant, setVariant] = React.useState<NavVariant>("static");
 
-        a {
-          text-decoration: none;
-          color: var(--geist-foreground);
-          display: inline-block;
-        }
-
-        .left a[data-active='true'] {
-          color: gray;
-        }
-
-        a + a {
-          margin-left: 1rem;
-        }
-      `}</style>
-    </div>
-  );
-
-  let right = null;
-
-  if (status === 'loading') {
-    left = (
-      <div className="left">
-        <Link href="/">
-          <a className="bold" data-active={isActive('/')}>
-            Feed
-          </a>
-        </Link>
-        <style jsx>{`
-          .bold {
-            font-weight: bold;
-          }
-
-          a {
-            text-decoration: none;
-            color: var(--geist-foreground);
-            display: inline-block;
-          }
-
-          .left a[data-active='true'] {
-            color: gray;
-          }
-
-          a + a {
-            margin-left: 1rem;
-          }
-        `}</style>
-      </div>
-    );
-    right = (
-      <div className="right">
-        <p>Validating session ...</p>
-        <style jsx>{`
-          .right {
-            margin-left: auto;
-          }
-        `}</style>
-      </div>
-    );
-  }
-
-  if (!session) {
-    right = (
-      <div className="right">
-        <Link href="/api/auth/signin">
-          <a data-active={isActive('/signup')}>Log in</a>
-        </Link>
-        <style jsx>{`
-          a {
-            text-decoration: none;
-            color: var(--geist-foreground);
-            display: inline-block;
-          }
-
-          a + a {
-            margin-left: 1rem;
-          }
-
-          .right {
-            margin-left: auto;
-          }
-
-          .right a {
-            border: 1px solid var(--geist-foreground);
-            padding: 0.5rem 1rem;
-            border-radius: 3px;
-          }
-        `}</style>
-      </div>
-    );
-  }
-
-  if (session) {
-    left = (
-      <div className="left">
-        <Link href="/">
-          <a className="bold" data-active={isActive('/')}>
-            Feed
-          </a>
-        </Link>
-        <Link href="/drafts">
-          <a data-active={isActive('/drafts')}>My drafts</a>
-        </Link>
-        <style jsx>{`
-          .bold {
-            font-weight: bold;
-          }
-
-          a {
-            text-decoration: none;
-            color: var(--geist-foreground);
-            display: inline-block;
-          }
-
-          .left a[data-active='true'] {
-            color: gray;
-          }
-
-          a + a {
-            margin-left: 1rem;
-          }
-        `}</style>
-      </div>
-    );
-    right = (
-      <div className="right">
-        <p>
-          {session.user!.name} ({session.user!.email})
-        </p>
-        <Link href="/create">
-          <button>
-            <a>New post</a>
-          </button>
-        </Link>
-        <button onClick={() => signOut()}>
-          <a>Log out</a>
-        </button>
-        <style jsx>{`
-          a {
-            text-decoration: none;
-            color: var(--geist-foreground);
-            display: inline-block;
-          }
-
-          p {
-            display: inline-block;
-            font-size: 13px;
-            padding-right: 1rem;
-          }
-
-          a + a {
-            margin-left: 1rem;
-          }
-
-          .right {
-            margin-left: auto;
-          }
-
-          .right a {
-            border: 1px solid var(--geist-foreground);
-            padding: 0.5rem 1rem;
-            border-radius: 3px;
-          }
-
-          button {
-            border: none;
-          }
-        `}</style>
-      </div>
-    );
-  }
+  const variants = ["static", "floating", "sticky"];
 
   return (
-    <nav>
-      {left}
-      {right}
-      <style jsx>{`
-        nav {
-          display: flex;
-          padding: 2rem;
-          align-items: center;
-        }
-      `}</style>
-    </nav>
+    <>
+    <Navbar isBordered variant={variant}>
+    <Navbar.Brand>
+      <AcmeLogo />
+      <Text b color="inherit" hideIn="xs">
+        ACME
+      </Text>
+    </Navbar.Brand>
+    <Navbar.Content hideIn="xs">
+      <Navbar.Link href="#">Features</Navbar.Link>
+      <Navbar.Link isActive href="#">Customers</Navbar.Link>
+      <Navbar.Link href="#">Pricing</Navbar.Link>
+      <Navbar.Link href="#">Company</Navbar.Link>
+    </Navbar.Content>
+    <Navbar.Content>
+      <ToggleDarkMode/>
+      <Navbar.Link color="inherit" href="#">
+        Login
+      </Navbar.Link>
+      <Navbar.Item>
+        <Button auto flat>
+          Sign Up
+        </Button>
+      </Navbar.Item>
+    </Navbar.Content>
+  </Navbar>
+  <VariantsSelectorWrapper>
+    <Card css={{maxW: "50%"}}>
+      <Card.Body css={{pt: "$8", px: "$8"}}>
+        <Radio.Group
+          defaultValue="default"
+          label="Select variant"
+          orientation="horizontal"
+          size="sm"
+          value={variant}
+          onChange={(e) => setVariant(e as NavVariant)}
+        >
+          {variants.map((variant) => (
+            <Radio key={variant} value={variant}>
+              {variant}
+            </Radio>
+          ))}
+        </Radio.Group>
+      </Card.Body>
+    </Card>
+  </VariantsSelectorWrapper>
+  </>
   );
 };
 
