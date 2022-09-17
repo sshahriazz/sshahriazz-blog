@@ -6,6 +6,7 @@ import prisma from "../../lib/prisma";
 import { useSession, signOut } from "next-auth/react";
 import Layout from "../../components/Layout";
 import Post, { PostProps } from "../../components/Post";
+import { Box } from "../../primitive/Box";
 
 export const getStaticProps: GetStaticProps = async () => {
   const feed = await prisma.post.findMany({
@@ -29,7 +30,7 @@ type Props = {
 const Posts: NextPage<Props> = (props) => {
 const {status, data: session} = useSession()
 
-  return  <Layout>
+  return  <Box>
   <div className="page">
     <h1>Public Feed</h1>
     <main>
@@ -54,7 +55,7 @@ const {status, data: session} = useSession()
       margin-top: 2rem;
     }
   `}</style>
-</Layout>
+</Box>
 };
 
 export default Posts;

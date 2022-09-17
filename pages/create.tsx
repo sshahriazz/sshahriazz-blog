@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import Layout from '../components/Layout';
 import Router from 'next/router';
+import { Box } from '../primitive/Box';
 
 const Draft: React.FC = () => {
   const [title, setTitle] = useState('');
@@ -24,7 +25,7 @@ const Draft: React.FC = () => {
   };
 
   return (
-    <Layout>
+    <Box>
       <div>
         <form onSubmit={submitData}>
           <h1>New Draft</h1>
@@ -49,7 +50,7 @@ const Draft: React.FC = () => {
         </form>
       </div>
       
-    </Layout>
+    </Box>
   );
 };
 

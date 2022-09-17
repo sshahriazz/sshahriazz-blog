@@ -5,13 +5,10 @@ const ToggleDarkMode = () => {
   const { setTheme } = useNextTheme();
   const { isDark, type } = useTheme();
   return (
-    <div>
-      {type}
       <Switch
         checked={isDark}
         onChange={(e) => setTheme(e.target.checked ? "dark" : "light")}
       />
-    </div>
   );
 };
 export default ToggleDarkMode;

@@ -6,16 +6,17 @@ type Props = {
 };
 
 import { Box } from "../primitive/Box";
+import { Container } from "@nextui-org/react";
 
-export const Layout: FC<{children: React.ReactNode}> = ({ children }) => (
+export const Layout: FC<{ children: React.ReactNode }> = ({ children }) => (
   <Box
     css={{
-      maxW: "100%"
+      maxW: "100%",
     }}
   >
-    {children}
+    <Header />
+    <Container>{children}</Container>
   </Box>
 );
-
 
 export default Layout;

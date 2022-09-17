@@ -7,6 +7,7 @@ import Layout from '../../components/Layout';
 import { PostProps } from '../../components/Post';
 import { useSession } from 'next-auth/react';
 import prisma from '../../lib/prisma';
+import { Box } from '../../primitive/Box';
 
 export const getServerSideProps: GetServerSideProps = async ({ params }) => {
   const post = await prisma.post.findUnique({
@@ -50,7 +51,7 @@ const Post: React.FC<{post:PostProps}> = (props) => {
   }
 
   return (
-    <Layout>
+    <Box>
       <div>
         <h2>{title}</h2>
         <p>By {props?.post.author?.name || 'Unknown author'}</p>
@@ -85,7 +86,7 @@ const Post: React.FC<{post:PostProps}> = (props) => {
           margin-left: 1rem;
         }
       `}</style>
-    </Layout>
+    </Box>
   );
 };
 

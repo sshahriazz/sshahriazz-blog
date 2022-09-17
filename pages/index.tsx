@@ -4,8 +4,9 @@ import Image from "next/image";
 import styles from "../styles/Home.module.css";
 import prisma from "../lib/prisma";
 import { useSession, signOut } from "next-auth/react";
-import Layout from "../components/Layout";
 import Post, { PostProps } from "../components/Post";
+import { Spacer } from "@nextui-org/react";
+import { Box } from "../primitive/Box";
 
 export const getStaticProps: GetStaticProps = async () => {
   const feed = await prisma.post.findMany({
@@ -23,24 +24,27 @@ export const getStaticProps: GetStaticProps = async () => {
   };
 };
 type Props = {
-  feed: PostProps[]
-}
+  feed: PostProps[];
+};
 
 const Home: NextPage<Props> = (props) => {
-const {status, data: session} = useSession()
+  const { status, data: session } = useSession();
 
-  return  <Layout>
-  <div className="page">
-    <h1>Public Feed</h1>
-    <main>
-      {props.feed.map((post) => (
-        <div key={post.id} className="post">
-          <Post post={post} />
-        </div>
-      ))}
-    </main>
-  </div>
-</Layout>
+  return (
+    <Box>
+      <div className="page">
+        <h1>Public Feed</h1>
+        <main>
+          {props.feed.map((post) => (
+            <div key={post.id} className="post">
+              <Post post={post} />
+              <Spacer y={1} />
+            </div>
+          ))}
+        </main>
+      </div>
+    </Box>
+  );
 };
 
 export default Home;

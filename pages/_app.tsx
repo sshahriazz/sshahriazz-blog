@@ -11,7 +11,6 @@ function MyApp({ Component, pageProps }: AppProps) {
     <SessionProvider session={pageProps.session}>
       <ThemeProvider>
           <Layout>
-            <Header />
             <Component {...pageProps} />
           </Layout>
       </ThemeProvider>
