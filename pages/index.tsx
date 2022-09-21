@@ -9,13 +9,7 @@ import CredentialModal from "../components/CredentialModal";
 import CredentialForm from "../components/CredentialForm";
 
 export const getStaticProps: GetStaticProps = async () => {
-  const feed = await prisma.post.findMany({
-    include: {
-      author: {
-        select: { name: true },
-      },
-    },
-  });
+  const feed = await prisma.post.findMany();
 
   return {
     props: { feed },

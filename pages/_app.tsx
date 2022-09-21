@@ -1,8 +1,6 @@
 import type { AppProps } from "next/app";
 import { SessionProvider } from "next-auth/react";
 import Layout from "../components/Layout";
-import Header from "../components/Header";
-import { NextUIProvider } from "@nextui-org/react";
 import ThemeProvider from "../components/ThemeProvider";
 import { Router } from "next/router";
 import NProgress from "nprogress";

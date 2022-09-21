@@ -1,13 +1,12 @@
-
-import React from 'react';
-import { GetServerSideProps } from 'next';
-import ReactMarkdown from 'react-markdown';
-import Router from 'next/router';
-import Layout from '../../components/Layout';
-import { PostProps } from '../../components/Post';
-import { useSession } from 'next-auth/react';
-import prisma from '../../lib/prisma';
-import { Box } from '../../primitive/Box';
+import React from "react";
+import { GetServerSideProps } from "next";
+import ReactMarkdown from "react-markdown";
+import Router from "next/router";
+import Layout from "../../components/Layout";
+import { PostProps } from "../../components/Post";
+import { useSession } from "next-auth/react";
+import prisma from "../../lib/prisma";
+import { Box } from "../../primitive/Box";
 
 export const getServerSideProps: GetServerSideProps = async ({ params }) => {
   const post = await prisma.post.findUnique({
@@ -21,30 +20,30 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
     },
   });
   return {
-    props: {post},
+    props: { post },
   };
 };
 
 async function publishPost(id: string): Promise<void> {
   await fetch(`/api/publish/${id}`, {
-    method: 'PUT',
+    method: "PUT",
   });
-  await Router.push('/');
+  await Router.push("/");
 }
 async function deletePost(id: string): Promise<void> {
   await fetch(`/api/post/${id}`, {
-    method: 'DELETE',
+    method: "DELETE",
   });
-  Router.push('/');
+  Router.push("/");
 }
 
-const Post: React.FC<{post:PostProps}> = (props) => {
-  const { data: session, status } = useSession();
-  if (status === 'loading') {
-    return <div>Authenticating ...</div>;
-  }
-  const userHasValidSession = Boolean(session);
-  const postBelongsToUser = session?.user?.email === props.post.author?.email;
+const Post: React.FC<{ post: PostProps }> = (props) => {
+  // const { data: session, status } = useSession();
+  // if (status === 'loading') {
+  //   return <div>Authenticating ...</div>;
+  // }
+  // const userHasValidSession = Boolean(session);
+  // const postBelongsToUser = session?.user?.email === props.post.author?.email;
   let title = props.post.title;
   if (!props.post.published) {
     title = `${title} (Draft)`;
@@ -54,38 +53,15 @@ const Post: React.FC<{post:PostProps}> = (props) => {
     <Box>
       <div>
         <h2>{title}</h2>
-        <p>By {props?.post.author?.name || 'Unknown author'}</p>
-        <ReactMarkdown>
-        {props.post.content}
-        </ReactMarkdown>
-        {!props.post.published && userHasValidSession && postBelongsToUser && (
-          <button onClick={() => publishPost(props.post.id)}>Publish</button>
-        )}
-        {!props.post.published && userHasValidSession && postBelongsToUser && (
-          <button onClick={() => deletePost(props.post.id)}>Delete</button>
-        )}
+        {/* <p>By {props?.post.author?.name || 'Unknown author'}</p> */}
+        <ReactMarkdown>{props.post.content}</ReactMarkdown>
+        {/* {!props.post.published && userHasValidSession && postBelongsToUser && ( */}
+        <button onClick={() => publishPost(props.post.id)}>Publish</button>
+        {/* )} */}
+        {/* {!props.post.published && userHasValidSession && postBelongsToUser && ( */}
+        <button onClick={() => deletePost(props.post.id)}>Delete</button>
+        {/* )} */}
       </div>
-      <style jsx>{`
-        .page {
-          background: var(--geist-background);
-          padding: 2rem;
-        }
-
-        .actions {
-          margin-top: 2rem;
-        }
-
-        button {
-          background: #ececec;
-          border: 0;
-          border-radius: 0.125rem;
-          padding: 1rem 2rem;
-        }
-
-        button + button {
-          margin-left: 1rem;
-        }
-      `}</style>
     </Box>
   );
 };

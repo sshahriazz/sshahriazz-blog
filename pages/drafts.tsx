@@ -1,12 +1,11 @@
 // pages/drafts.tsx
 
-import React from 'react';
-import { GetServerSideProps } from 'next';
-import { useSession, getSession } from 'next-auth/react';
-import Layout from '../components/Layout';
-import Post, { PostProps } from '../components/Post';
-import prisma from '../lib/prisma';
-import { Box } from '../primitive/Box';
+import React from "react";
+import { GetServerSideProps } from "next";
+import { useSession, getSession } from "next-auth/react";
+import Post, { PostProps } from "../components/Post";
+import prisma from "../lib/prisma";
+import { Box } from "../primitive/Box";
 
 export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
   const session = await getSession({ req });
@@ -38,14 +37,14 @@ type Props = {
 const Drafts: React.FC<Props> = (props) => {
   const { data: session } = useSession();
 
-  if (!session) {
-    return (
-      <Box>
-        <h1>My Drafts</h1>
-        <div>You need to be authenticated to view this page.</div>
-      </Box>
-    );
-  }
+  // if (!session) {
+  //   return (
+  //     <Box>
+  //       <h1>My Drafts</h1>
+  //       <div>You need to be authenticated to view this page.</div>
+  //     </Box>
+  //   );
+  // }
 
   return (
     <Box>
@@ -59,7 +58,6 @@ const Drafts: React.FC<Props> = (props) => {
           ))}
         </main>
       </div>
-      
     </Box>
   );
 };
