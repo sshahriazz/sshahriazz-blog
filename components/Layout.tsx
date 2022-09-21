@@ -1,22 +1,27 @@
-import React, { FC, ReactNode } from "react";
+import React, { FC, ReactNode, useState } from "react";
 import Header from "./Header";
+import NProgress from "nprogress";
+import Router from "next/router";
+import { Box } from "../primitive/Box";
+import { Container, Progress } from "@nextui-org/react";
 
 type Props = {
   children: ReactNode;
 };
 
-import { Box } from "../primitive/Box";
-import { Container } from "@nextui-org/react";
+export const Layout: FC<{ children: React.ReactNode }> = ({ children }) => {
+  const [isPageLoading, setIsPageLoading] = useState<boolean>(false);
 
-export const Layout: FC<{ children: React.ReactNode }> = ({ children }) => (
-  <Box
-    css={{
-      maxW: "100%",
-    }}
-  >
-    <Header />
-    <Container>{children}</Container>
-  </Box>
-);
+  return (
+    <Box
+      css={{
+        maxW: "100%",
+      }}
+    >
+      <Header />
+      <Container>{children}</Container>
+    </Box>
+  );
+};
 
 export default Layout;

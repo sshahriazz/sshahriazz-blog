@@ -1,13 +1,24 @@
-import React, { FC } from 'react';
-import { useRouter } from 'next/router';
-import { signOut, useSession } from 'next-auth/react';
-import { Avatar, Button, Card, Dropdown, Link, Navbar, Radio, Text, VariantProps } from '@nextui-org/react';
-import { VariantsSelectorWrapper } from '../primitive/VariantsSelectorWrapper';
-import { NavbarVariantsProps } from '@nextui-org/react/types/navbar/navbar.styles';
-import ToggleDarkMode from './ToggleDarkMode';
+import React, { FC, FormEventHandler, useState } from "react";
+import { useRouter } from "next/router";
+import { signIn, useSession } from "next-auth/react";
+import {
+  Avatar,
+  Button,
+  Card,
+  Dropdown,
+  Link,
+  Navbar,
+  Radio,
+  Text,
+} from "@nextui-org/react";
+import { VariantsSelectorWrapper } from "../primitive/VariantsSelectorWrapper";
+import { NavbarVariantsProps } from "@nextui-org/react/types/navbar/navbar.styles";
+import ToggleDarkMode from "./ToggleDarkMode";
+import { signOut } from "next-auth/react";
+import CredentialModal from "./CredentialModal";
+import CredentialForm from "./CredentialForm";
 
-
-export const AcmeLogo: FC = () => 
+export const AcmeLogo: FC = () => (
   <svg
     fill="none"
     height="36"
@@ -23,14 +34,17 @@ export const AcmeLogo: FC = () =>
       fillRule="evenodd"
     />
   </svg>
+);
 
 const Header: React.FC = () => {
+  const [userInfo, setUserInfo] = useState({ email: "", password: "" });
+
   const router = useRouter();
   const isActive: (pathname: string) => boolean = (pathname) =>
     router.pathname === pathname;
 
   const { data: session, status } = useSession();
-  type NavVariant = "static" | "sticky" | "floating" | undefined
+  type NavVariant = "static" | "sticky" | "floating" | undefined;
 
   const [variant, setVariant] = React.useState<NavVariant>("static");
 
@@ -49,11 +63,58 @@ const Header: React.FC = () => {
     "Log Out",
   ];
 
+  function handleAction(action: React.Key) {
+    if (action === "logout") {
+      signOut();
+    }
+  }
+  const [visible, setVisible] = useState(false);
+  const handler = () => setVisible(true);
+  const closeHandler = () => {
+    setVisible(false);
+  };
+  const handleSubmit: FormEventHandler<HTMLFormElement> = async (e) => {
+    e.preventDefault();
+    await fetch("/api/auth/create", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        email: userInfo.email,
+        password: userInfo.password,
+      }),
+    })
+      .then((data) => {
+        return data.json();
+      })
+      .then((userData) => {
+        signIn("credentials", {
+          email: userData.email,
+          password: userInfo.password,
+        });
+      })
+      .catch((e) => console.log(e));
+  };
 
   return (
     <>
-    <Navbar variant={variant} isBordered>
-        <Navbar.Toggle showIn="xs" />
+      <CredentialModal
+        visible={visible}
+        closeHandler={closeHandler}
+        handleSubmit={handleSubmit}
+      >
+        <CredentialForm
+          emailValue={userInfo.email}
+          onChangeEmail={({ target }) =>
+            setUserInfo({ ...userInfo, email: target.value })
+          }
+          passwordValue={userInfo.password}
+          onChnagePassword={({ target }) =>
+            setUserInfo({ ...userInfo, password: target.value })
+          }
+        />
+      </CredentialModal>
+      <Navbar variant={variant} isBordered>
+        <Navbar.Toggle showIn="sm" />
         <Navbar.Brand
           css={{
             "@xs": {
@@ -62,22 +123,20 @@ const Header: React.FC = () => {
           }}
         >
           <AcmeLogo />
-          <Text b color="inherit" hideIn="xs">
+          <Text b color="inherit" hideIn="sm">
             ACME
           </Text>
         </Navbar.Brand>
         <Navbar.Content
           enableCursorHighlight
           activeColor="warning"
-          hideIn="xs"
+          hideIn="sm"
           variant="highlight-rounded"
         >
-          <Navbar.Link href="#">Features</Navbar.Link>
-          <Navbar.Link isActive href="#">
-            Customers
-          </Navbar.Link>
-          <Navbar.Link href="#">Pricing</Navbar.Link>
-          <Navbar.Link href="#">Company</Navbar.Link>
+          <Navbar.Link>Features</Navbar.Link>
+          <Navbar.Link isActive>Customers</Navbar.Link>
+          <Navbar.Link>Pricing</Navbar.Link>
+          <Navbar.Link>Company</Navbar.Link>
         </Navbar.Content>
         <Navbar.Content
           css={{
@@ -87,49 +146,64 @@ const Header: React.FC = () => {
             },
           }}
         >
-      <ToggleDarkMode/>
-          <Dropdown placement="bottom-right">
-            <Navbar.Item>
-              <Dropdown.Trigger>
-                <Avatar
-                  bordered
-                  as="button"
-                  color="secondary"
-                  size="md"
-                  src="https://i.pravatar.cc/150?u=a042581f4e29026704d"
-                />
-              </Dropdown.Trigger>
-            </Navbar.Item>
-            <Dropdown.Menu
-              aria-label="User menu actions"
-              color="secondary"
-              onAction={(actionKey) => console.log({ actionKey })}
-            >
-              <Dropdown.Item key="profile" css={{ height: "$18" }}>
-                <Text b color="inherit" css={{ d: "flex" }}>
-                  Signed in as
-                </Text>
-                <Text b color="inherit" css={{ d: "flex" }}>
-                  zoey@example.com
-                </Text>
-              </Dropdown.Item>
-              <Dropdown.Item key="settings" withDivider>
-                My Settings
-              </Dropdown.Item>
-              <Dropdown.Item key="team_settings">Team Settings</Dropdown.Item>
-              <Dropdown.Item key="analytics" withDivider>
-                Analytics
-              </Dropdown.Item>
-              <Dropdown.Item key="system">System</Dropdown.Item>
-              <Dropdown.Item key="configurations">Configurations</Dropdown.Item>
-              <Dropdown.Item key="help_and_feedback" withDivider>
-                Help & Feedback
-              </Dropdown.Item>
-              <Dropdown.Item key="logout" withDivider color="error">
-                Log Out
-              </Dropdown.Item>
-            </Dropdown.Menu>
-          </Dropdown>
+          <ToggleDarkMode />
+          {session ? (
+            <Dropdown placement="bottom-right">
+              <Navbar.Item>
+                <Dropdown.Trigger>
+                  <Avatar
+                    bordered
+                    as="button"
+                    color="secondary"
+                    size="md"
+                    src="https://i.pravatar.cc/150?u=a042581f4e29026704d"
+                  />
+                </Dropdown.Trigger>
+              </Navbar.Item>
+              <Dropdown.Menu
+                aria-label="User menu actions"
+                color="secondary"
+                onAction={(actionKey) => handleAction(actionKey)}
+              >
+                <Dropdown.Item key="profile" css={{ height: "$18" }}>
+                  <Text b color="inherit" css={{ d: "flex" }}>
+                    Signed in as
+                  </Text>
+                  <Text b color="inherit" css={{ d: "flex" }}>
+                    zoey@example.com
+                  </Text>
+                </Dropdown.Item>
+                <Dropdown.Item key="settings" withDivider>
+                  My Settings
+                </Dropdown.Item>
+                <Dropdown.Item key="team_settings">Team Settings</Dropdown.Item>
+                <Dropdown.Item key="analytics" withDivider>
+                  Analytics
+                </Dropdown.Item>
+                <Dropdown.Item key="system">System</Dropdown.Item>
+                <Dropdown.Item key="configurations">
+                  Configurations
+                </Dropdown.Item>
+                <Dropdown.Item key="help_and_feedback" withDivider>
+                  Help & Feedback
+                </Dropdown.Item>
+                <Dropdown.Item key="logout" withDivider color="error">
+                  Log Out
+                </Dropdown.Item>
+              </Dropdown.Menu>
+            </Dropdown>
+          ) : (
+            <Navbar.Content>
+              <Button auto onPress={() => signIn()} shadow color="gradient">
+                Login
+              </Button>
+              <Navbar.Item>
+                <Button auto flat onClick={handler}>
+                  Sign Up
+                </Button>
+              </Navbar.Item>
+            </Navbar.Content>
+          )}
         </Navbar.Content>
         <Navbar.Collapse>
           {collapseItems.map((item, index) => (
@@ -154,27 +228,27 @@ const Header: React.FC = () => {
           ))}
         </Navbar.Collapse>
       </Navbar>
-  <VariantsSelectorWrapper>
-    <Card css={{maxW: "50%"}}>
-      <Card.Body css={{pt: "$8", px: "$8"}}>
-        <Radio.Group
-          defaultValue="default"
-          label="Select variant"
-          orientation="horizontal"
-          size="sm"
-          value={variant}
-          onChange={(e) => setVariant(e as NavVariant)}
-        >
-          {variants.map((variant) => (
-            <Radio key={variant} value={variant}>
-              {variant}
-            </Radio>
-          ))}
-        </Radio.Group>
-      </Card.Body>
-    </Card>
-  </VariantsSelectorWrapper>
-  </>
+      <VariantsSelectorWrapper>
+        <Card css={{ maxW: "50%" }}>
+          <Card.Body css={{ pt: "$8", px: "$8" }}>
+            <Radio.Group
+              defaultValue="default"
+              label="Select variant"
+              orientation="horizontal"
+              size="sm"
+              value={variant}
+              onChange={(e) => setVariant(e as NavVariant)}
+            >
+              {variants.map((variant, index) => (
+                <Radio key={index} value={variant}>
+                  {variant}
+                </Radio>
+              ))}
+            </Radio.Group>
+          </Card.Body>
+        </Card>
+      </VariantsSelectorWrapper>
+    </>
   );
 };
 

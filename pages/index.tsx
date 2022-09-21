@@ -1,16 +1,15 @@
 import type { GetStaticProps, NextPage } from "next";
-import Head from "next/head";
-import Image from "next/image";
-import styles from "../styles/Home.module.css";
 import prisma from "../lib/prisma";
-import { useSession, signOut } from "next-auth/react";
+import { useSession, signOut, signIn } from "next-auth/react";
 import Post, { PostProps } from "../components/Post";
-import { Spacer } from "@nextui-org/react";
+import { Button, Spacer } from "@nextui-org/react";
 import { Box } from "../primitive/Box";
+import { FormEventHandler, useState } from "react";
+import CredentialModal from "../components/CredentialModal";
+import CredentialForm from "../components/CredentialForm";
 
 export const getStaticProps: GetStaticProps = async () => {
   const feed = await prisma.post.findMany({
-    // where: { published: true },
     include: {
       author: {
         select: { name: true },
@@ -28,8 +27,6 @@ type Props = {
 };
 
 const Home: NextPage<Props> = (props) => {
-  const { status, data: session } = useSession();
-
   return (
     <Box>
       <div className="page">

@@ -1,4 +1,3 @@
-// 1. Import `createTheme`
 import { createTheme, NextUIProvider } from "@nextui-org/react";
 import { ThemeProvider as NextThemesProvider } from "next-themes";
 import React, { FC } from "react";
