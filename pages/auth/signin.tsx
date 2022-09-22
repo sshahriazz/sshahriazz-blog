@@ -1,6 +1,6 @@
 import { Button, Grid } from "@nextui-org/react";
 import { NextPage } from "next";
-import { signIn } from "next-auth/react";
+import { getProviders, signIn } from "next-auth/react";
 import { useRouter } from "next/router";
 import React, { FormEventHandler, useState } from "react";
 import CredentialForm from "../../components/CredentialForm";
@@ -41,7 +41,7 @@ const SignIn: NextPage<any> = (props) => {
     >
       {providers &&
         Object.values(providers).map((provider: any) => (
-          <Box key={provider.id}>
+          <Box key={provider.name}>
             {provider.id === "credentials" && (
               <form onSubmit={handleSubmit}>
                 <CredentialForm
@@ -78,9 +78,8 @@ const SignIn: NextPage<any> = (props) => {
 };
 
 export const getServerSideProps = async (ctx: any) => {
-  const providers = await fetch("api/auth/providers");
-  const providersJson = providers.json();
+  const providers = await getProviders();
 
-  return { props: { providers: providersJson } };
+  return { props: { providers: providers } };
 };
 export default SignIn;
