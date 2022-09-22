@@ -75,7 +75,7 @@ const Header: React.FC = () => {
   };
   const handleSubmit: FormEventHandler<HTMLFormElement> = async (e) => {
     e.preventDefault();
-    await fetch("/api/auth/create", {
+    const user = await fetch("/api/auth/create", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -83,16 +83,8 @@ const Header: React.FC = () => {
         password: userInfo.password,
       }),
     })
-      .then((data) => {
-        return data.json();
-      })
-      .then((userData) => {
-        signIn("credentials", {
-          email: userData.email,
-          password: userInfo.password,
-        });
-      })
-      .catch((e) => console.log(e));
+      .then((data) => data.json())
+      .then((t) => console.log(t));
   };
 
   return (

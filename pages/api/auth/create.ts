@@ -33,7 +33,7 @@ export default async function createUser(
         },
       });
       if (newUser) {
-        return res.status(201).json(newUser);
+        return res.status(201).json({ data: newUser });
       }
     } catch (e) {
       if (e instanceof Prisma.PrismaClientKnownRequestError) {

@@ -46,6 +46,7 @@ const CredentialForm: FC<CredentialFormProps> = (props) => {
       return "";
     }
   };
+
   const validateEmail = (email: string) => {
     return email.trim().match(/^[A-Z0-9._%+-]+@[A-Z0-9.-]+.[A-Z]{2,4}$/i);
   };
@@ -65,15 +66,12 @@ const CredentialForm: FC<CredentialFormProps> = (props) => {
         color: undefined,
       };
     }
-    validatePassword(passwordValue);
     const isValid = validateEmail(emailValue);
-    console.log(passwordValue);
-
     return {
       text: isValid ? "Correct email" : "Enter a valid email",
       color: isValid ? "success" : "error",
     };
-  }, [emailValue, passwordValue]);
+  }, [emailValue]);
 
   const passwordHelper = React.useMemo((): {
     text: string;
