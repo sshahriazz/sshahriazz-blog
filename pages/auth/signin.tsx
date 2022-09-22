@@ -1,17 +1,10 @@
 import { Button, Grid } from "@nextui-org/react";
 import { NextPage } from "next";
-import { getProviders, signIn } from "next-auth/react";
+import { signIn } from "next-auth/react";
 import { useRouter } from "next/router";
 import React, { FormEventHandler, useState } from "react";
 import CredentialForm from "../../components/CredentialForm";
 import { Box } from "../../primitive/Box";
-
-export async function getServerSideProps() {
-  const providers = await getProviders();
-  console.log("server: provider", providers);
-
-  return { props: { providers } };
-}
 
 const SignIn: NextPage<any> = (props) => {
   const { providers } = props;
@@ -36,7 +29,6 @@ const SignIn: NextPage<any> = (props) => {
   const handleSingIn = async (id: string) => {
     const user = await signIn(id, { callbackUrl: "http://localhost:3000/" });
   };
-  console.log(providers);
 
   return (
     <Box
@@ -85,4 +77,10 @@ const SignIn: NextPage<any> = (props) => {
   );
 };
 
+export const getServerSideProps = async (ctx: any) => {
+  const providers = await fetch("api/auth/providers");
+  const providersJson = providers.json();
+
+  return { props: { providers: providersJson } };
+};
 export default SignIn;
