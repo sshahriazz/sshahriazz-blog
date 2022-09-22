@@ -12,7 +12,6 @@ export default async function createUser(
       .status(405)
       .json({ status: 405, message: "Only POST method allowed" });
   const { email, password } = req.body;
-  console.log(email, password);
 
   const existingUser = await prisma.user.findUnique({
     where: { email: email },

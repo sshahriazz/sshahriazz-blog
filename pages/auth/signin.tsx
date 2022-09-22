@@ -8,6 +8,8 @@ import { Box } from "../../primitive/Box";
 
 export async function getServerSideProps() {
   const providers = await getProviders();
+  console.log("server: provider", providers);
+
   return { props: { providers } };
 }
 
@@ -34,6 +36,7 @@ const SignIn: NextPage<any> = (props) => {
   const handleSingIn = async (id: string) => {
     const user = await signIn(id, { callbackUrl: "http://localhost:3000/" });
   };
+  console.log(providers);
 
   return (
     <Box
