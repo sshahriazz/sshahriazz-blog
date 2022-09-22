@@ -5,7 +5,6 @@ import GitHubProvider from "next-auth/providers/github";
 import GoogleProvider from "next-auth/providers/google";
 import CredentialsProvider from "next-auth/providers/credentials";
 import prisma from "../../../lib/prisma";
-import { User } from "@prisma/client";
 import bcrypt from "bcrypt";
 
 const authHandler: NextApiHandler = (req, res) => NextAuth(req, res, options);
@@ -35,7 +34,6 @@ const options: NextAuthOptions = {
           password,
           dbUser.password!
         );
-        console.log(matchedPassword);
 
         if (email !== dbUser?.email || !matchedPassword) {
           return null;

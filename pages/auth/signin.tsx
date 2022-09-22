@@ -24,8 +24,11 @@ const SignIn: NextPage<any> = (props) => {
       password: userInfo.password,
       redirect: false,
     });
+
     if (!(user?.status === 401)) {
       router.push("/");
+    } else {
+      // console.log(user.error);
     }
   };
   const handleSingIn = async (id: string) => {
@@ -41,8 +44,8 @@ const SignIn: NextPage<any> = (props) => {
         },
       }}
     >
-      <>
-        {Object.values(providers).map((provider: any) => (
+      {providers &&
+        Object.values(providers).map((provider: any) => (
           <Box key={provider.id}>
             {provider.id === "credentials" && (
               <form onSubmit={handleSubmit}>
@@ -64,23 +67,17 @@ const SignIn: NextPage<any> = (props) => {
             {provider.id !== "email" && provider.id !== "credentials" && (
               <Grid.Container gap={2} justify="center" id="grid">
                 <Grid>
-                  {/* <a
-                    href={provider.signinUrl}
-                    onClick={(e) => e.preventDefault()}
-                  > */}
                   <Button
                     onClick={() => handleSingIn(provider.id)}
                     color={provider.id === "github" ? "primary" : "warning"}
                   >
                     {provider.name}
                   </Button>
-                  {/* </a> */}
                 </Grid>
               </Grid.Container>
             )}
           </Box>
         ))}
-      </>
     </Box>
   );
 };

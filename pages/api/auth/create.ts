@@ -1,7 +1,7 @@
 import { Prisma } from "@prisma/client";
 import { NextApiRequest, NextApiResponse } from "next";
-// const bcrypt = require("bcrypt");
 import bcrypt from "bcrypt";
+import prisma from "../../../lib/prisma";
 
 export default async function createUser(
   req: NextApiRequest,
@@ -12,6 +12,7 @@ export default async function createUser(
       .status(405)
       .json({ status: 405, message: "Only POST method allowed" });
   const { email, password } = req.body;
+  console.log(email, password);
 
   const existingUser = await prisma.user.findUnique({
     where: { email: email },
