@@ -16,6 +16,8 @@ import {
   Drawer,
   Collapse,
   ScrollArea,
+  useMantineColorScheme,
+  Container,
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { NextLink } from "@mantine/next";
@@ -28,7 +30,8 @@ import {
   IconCoin,
   IconChevronDown,
 } from "@tabler/icons";
-import { LogoDesktopDark, ToggleDarkMode } from "components";
+import ComposedLogo from "components/brand-logo/ComposedLogo";
+import ToggleDarkMode from "./ToggleDarkMode";
 
 const useStyles = createStyles((theme) => ({
   link: {
@@ -157,12 +160,12 @@ export const TopNav = () => {
   ));
 
   return (
-    <Box pb={8}>
-      <Header height={60} px="md">
-        <Group position="apart" sx={{ height: "100%" }}>
-          <LogoDesktopDark />
-
+    <Box>
+      <Header height={60}>
+        <Group position="apart" sx={{ height: "100%" }} noWrap>
+          <ComposedLogo />
           <Group
+            noWrap
             sx={{ height: "100%" }}
             spacing={0}
             className={classes.hiddenMobile}
@@ -231,8 +234,7 @@ export const TopNav = () => {
               Academy
             </a>
           </Group>
-
-          <Group className={classes.hiddenMobile}>
+          <Group noWrap className={classes.hiddenMobile}>
             <ToggleDarkMode className={classes.hiddenMobile} />
             <Button component={NextLink} href="/auth/signin" variant="default">
               Log in

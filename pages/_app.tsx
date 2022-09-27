@@ -5,16 +5,27 @@ import {
   ColorSchemeProvider,
   MantineProvider,
 } from "@mantine/core";
-import { RouterTransition } from "components";
 import { NotificationsProvider } from "@mantine/notifications";
-import Layout from "components/layout";
 import { useState } from "react";
+import { useColorScheme } from "@mantine/hooks";
+import { getCookie, setCookie } from "cookies-next";
+import { GetServerSidePropsContext } from "next";
+import RouterTransition from "components/utils/RouterTransition";
+import MainLayout from "components/layout/MainLayout";
 
-export default function App(props: AppProps) {
+export default function App(props: AppProps & { colorScheme: ColorScheme }) {
   const { Component, pageProps } = props;
-  const [colorScheme, setColorScheme] = useState<ColorScheme>("light");
-  const toggleColorScheme = (value?: ColorScheme) =>
-    setColorScheme(value || (colorScheme === "dark" ? "light" : "dark"));
+  const [colorScheme, setColorScheme] = useState<ColorScheme>(
+    props.colorScheme
+  );
+  const toggleColorScheme = (value?: ColorScheme) => {
+    const nextColorScheme =
+      value || (colorScheme === "dark" ? "light" : "dark");
+    setColorScheme(nextColorScheme);
+    setCookie("mantine-color-scheme", nextColorScheme, {
+      maxAge: 60 * 60 * 24 * 30,
+    });
+  };
   return (
     <>
       <Head>
@@ -37,12 +48,16 @@ export default function App(props: AppProps) {
         >
           <RouterTransition />
           <NotificationsProvider>
-            <Layout>
+            <MainLayout>
               <Component {...pageProps} />
-            </Layout>
+            </MainLayout>
           </NotificationsProvider>
         </MantineProvider>
       </ColorSchemeProvider>
     </>
   );
 }
+App.getInitialProps = ({ ctx }: { ctx: GetServerSidePropsContext }) => ({
+  // get color scheme from cookie
+  colorScheme: getCookie("mantine-color-scheme", ctx) || "light",
+});

@@ -4,7 +4,7 @@ import {
   IconBrandYoutube,
   IconBrandInstagram,
 } from "@tabler/icons";
-import { LogoDesktopDark } from "components";
+import ComposedLogo from "components/brand-logo/ComposedLogo";
 
 const useStyles = createStyles((theme) => ({
   footer: {
@@ -37,7 +37,7 @@ interface FooterCenteredProps {
   links: { link: string; label: string }[];
 }
 
-export function FooterCentered({ links }: FooterCenteredProps) {
+export const CenteredFooter = ({ links }: FooterCenteredProps) => {
   const { classes } = useStyles();
   const items = links.map((link) => (
     <Anchor<"a">
@@ -55,7 +55,7 @@ export function FooterCentered({ links }: FooterCenteredProps) {
   return (
     <div className={classes.footer}>
       <div className={classes.inner}>
-        <LogoDesktopDark size={28} />
+        <ComposedLogo />
 
         <Group className={classes.links}>{items}</Group>
 
@@ -73,4 +73,5 @@ export function FooterCentered({ links }: FooterCenteredProps) {
       </div>
     </div>
   );
-}
+};
+export default CenteredFooter;

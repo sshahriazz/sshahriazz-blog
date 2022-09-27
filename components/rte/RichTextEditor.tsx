@@ -1,15 +1,15 @@
 import { useState } from "react";
 import dynamic from "next/dynamic";
 
-const RichTextEditor = dynamic(() => import("@mantine/rte"), {
+const Rte = dynamic(() => import("@mantine/rte"), {
   ssr: false,
 
   loading: () => null,
 });
-export const Rte = () => {
+export const RichTextEditor = () => {
   const [value, onChange] = useState("");
   return (
-    <RichTextEditor
+    <Rte
       controls={[
         ["bold", "italic", "underline", "link", "image"],
         ["unorderedList", "h1", "h2", "h3"],
@@ -22,4 +22,4 @@ export const Rte = () => {
     />
   );
 };
-export default Rte;
+export default RichTextEditor;

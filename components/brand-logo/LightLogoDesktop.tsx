@@ -1,6 +1,6 @@
 import React, { FC } from "react";
 
-export const LogoDesktop: FC<{ size?: number }> = ({ size }) => {
+export const LightLogoDesktop: FC<{ size?: number }> = ({ size }) => {
   return (
     <svg
       height={size}
@@ -46,8 +46,8 @@ export const LogoDesktop: FC<{ size?: number }> = ({ size }) => {
     </svg>
   );
 };
-LogoDesktop.defaultProps = {
+LightLogoDesktop.defaultProps = {
   size: 40,
 };
 
-export default LogoDesktop;
+export default LightLogoDesktop;

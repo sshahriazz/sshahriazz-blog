@@ -1,6 +1,6 @@
 import React, { FC } from "react";
 
-export const LogoDesktopDark: FC<{ size?: number }> = ({ size }) => {
+export const DarkLogoDesktop: FC<{ size?: number }> = ({ size }) => {
   return (
     <svg
       height={size}
@@ -47,8 +47,8 @@ export const LogoDesktopDark: FC<{ size?: number }> = ({ size }) => {
   );
 };
 
-LogoDesktopDark.defaultProps = {
+DarkLogoDesktop.defaultProps = {
   size: 40,
 };
 
-export default LogoDesktopDark;
+export default DarkLogoDesktop;
