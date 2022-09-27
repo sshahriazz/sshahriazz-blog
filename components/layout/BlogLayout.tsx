@@ -1,17 +1,28 @@
-import { createStyles, Grid } from "@mantine/core";
+import {
+  Box,
+  Center,
+  createStyles,
+  Grid,
+  Group,
+  ScrollArea,
+  SimpleGrid,
+  Stack,
+  useMantineTheme,
+} from "@mantine/core";
+import { useMediaQuery } from "@mantine/hooks";
 import BlogCard from "components/blog/BlogCard";
 import VerticalNav from "components/vertical-nav/VerticalNav";
 import React from "react";
 
 const styles = createStyles((theme) => ({
   hiddenMobile: {
-    [theme.fn.smallerThan("sm")]: {
+    [theme.fn.smallerThan("md")]: {
       display: "none",
     },
   },
 
   hiddenDesktop: {
-    [theme.fn.largerThan("sm")]: {
+    [theme.fn.largerThan("md")]: {
       display: "none",
     },
   },
@@ -32,16 +43,23 @@ const data = {
 
 export const BlogLayout = () => {
   const { classes } = styles();
+  const mediumScreen = useMediaQuery("(max-width: 550px)");
+
   return (
-    <Grid>
+    <Grid gutter={"xs"}>
       <Grid.Col className={classes.hiddenMobile} md={3}>
         <VerticalNav />
       </Grid.Col>
-      <Grid.Col sm={12} md={6}>
-        <BlogCard {...data} />
-        <BlogCard {...data} />
-        <BlogCard {...data} />
-        <BlogCard {...data} />
+      <Grid.Col md={6}>
+        <SimpleGrid cols={mediumScreen ? 1 : 2}>
+          <BlogCard {...data} />
+          <BlogCard {...data} />
+          <BlogCard {...data} />
+          <BlogCard {...data} />
+          <BlogCard {...data} />
+          <BlogCard {...data} />
+          <BlogCard {...data} />
+        </SimpleGrid>
       </Grid.Col>
       <Grid.Col className={classes.hiddenMobile} md={3}>
         3

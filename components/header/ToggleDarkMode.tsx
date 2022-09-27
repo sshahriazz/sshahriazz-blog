@@ -7,6 +7,7 @@ export const ToggleDarkMode: FC<HTMLAttributes<HTMLButtonElement>> = () => {
   const theme = useMantineTheme();
   return (
     <Switch
+      sx={{ cursor: "pointer" }}
       checked={colorScheme === "dark"}
       onChange={() => toggleColorScheme()}
       size="lg"

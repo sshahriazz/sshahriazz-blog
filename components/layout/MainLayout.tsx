@@ -1,5 +1,6 @@
 import { Container } from "@mantine/core";
 import CenteredFooter from "components/footer/CenteredFooter";
+import TopNav from "components/header/TopNav";
 import React, { FC, HTMLAttributes } from "react";
 
 export const MainLayout: FC<HTMLAttributes<HTMLDivElement>> = ({
@@ -8,33 +9,33 @@ export const MainLayout: FC<HTMLAttributes<HTMLDivElement>> = ({
   return (
     <>
       <Container size="lg">
-        <MainLayout />
+        <TopNav />
         {children}
+        <CenteredFooter
+          links={[
+            {
+              link: "#",
+              label: "Contact",
+            },
+            {
+              link: "#",
+              label: "Privacy",
+            },
+            {
+              link: "#",
+              label: "Blog",
+            },
+            {
+              link: "#",
+              label: "Store",
+            },
+            {
+              link: "#",
+              label: "Careers",
+            },
+          ]}
+        />
       </Container>
-      <CenteredFooter
-        links={[
-          {
-            link: "#",
-            label: "Contact",
-          },
-          {
-            link: "#",
-            label: "Privacy",
-          },
-          {
-            link: "#",
-            label: "Blog",
-          },
-          {
-            link: "#",
-            label: "Store",
-          },
-          {
-            link: "#",
-            label: "Careers",
-          },
-        ]}
-      />
     </>
   );
 };

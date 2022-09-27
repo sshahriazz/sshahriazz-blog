@@ -1,7 +1,6 @@
-import { Rte } from "components";
 import type { NextPage } from "next";
 
-const Home: NextPage = (props) => {
+const Home: NextPage = () => {
   return <>Good thing is gonna happen soon</>;
 };
 

@@ -239,7 +239,9 @@ export const TopNav = () => {
             <Button component={NextLink} href="/auth/signin" variant="default">
               Log in
             </Button>
-            <Button>Sign up</Button>
+            <Button component={NextLink} href="/auth/signin">
+              Sign up
+            </Button>
           </Group>
           <Group className={classes.hiddenDesktop}>
             <ToggleDarkMode />
@@ -288,8 +290,12 @@ export const TopNav = () => {
           />
 
           <Group position="center" grow pb="xl" px="md">
-            <Button variant="default">Log in</Button>
-            <Button>Sign up</Button>
+            <Button variant="default" component={NextLink} href="/auth/signin">
+              Log in
+            </Button>
+            <Button component={NextLink} href="/auth/signin">
+              Sign up
+            </Button>
           </Group>
         </ScrollArea>
       </Drawer>
